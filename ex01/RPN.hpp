@@ -1,24 +1,40 @@
 #ifndef RPN_HPP
 #define RPN_HPP
-#include<vector>
 #include<iostream>
-#include <fstream>
-#include <string>
-#include <cstdlib>
-#include <cctype> 
 #include<sstream>
+#include<stack>
+
 class RPN{
-private:
-std::vector<std::string> vect;
-public :
-    RPN();
-    RPN(const RPN &other);
+    private: 
+    std::stack<int> stack;
+    public :
+    RPN(const std::string & str);
     ~RPN();
-    RPN &operator=(const RPN &other);
-bool is_valide_digit(std::string &nbr);
-bool is_valide_operator(std::string &oper);
+    int calcule( const std::string &str);
+      class InvalidToken : public std::exception
+        {
+            public :
+                virtual const char* what() const throw() ;
+        };
+        
+        class NotEnoughOperands : public std::exception
+        {
+            public :
+                virtual const char* what() const throw() ;
+        };
 
-
+        class DivisionZero : public std::exception
+        {
+            public :
+                virtual const char* what() const throw() ;
+        };
+        
+        class EmptyStack : public std::exception
+        {
+            public :
+                virtual const char* what() const throw() ;
+        };
 };
 
-#endif
+
+#endif 

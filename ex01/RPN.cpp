@@ -1,35 +1,79 @@
 #include"RPN.hpp"
 
-RPN::RPN() : vect() {}
-RPN::RPN(const RPN &other) : vect(other.vect) {}
-RPN::~RPN() {}
-RPN &RPN::operator=(const RPN &other) {
-    if (this != &other) {
-        vect = other.vect;
-    }
-    return *this;
-}
-bool RPN::is_valide_digit(std::string &nbr)
+int RPN::calcule(const std::string &str)
 {
-    int i =0;
-    while(nbr[i])
+    std::istringstream ss(str);
+    std::string token;
+    while(ss >> token)
     {
-        if(!std::isdigit(nbr[i]))
-            return false;
-        i++;
+        if(token.size() == 1 && std::isdigit(token[0]))
+            stack.push(token[0] - '0');
+       
+        else if (token == "+" || token == "-" || token == "*" || token == "/")
+        {
+            if(stack.size() < 2)
+            {
+                throw NotEnoughOperands();
+            }
+            int b = stack.top();
+            stack.pop();
+            int a = stack.top();
+            stack.pop();
+            int res;
+            if(token == "+")
+                res = a + b;
+            else  if(token == "-")
+                res = a - b;
+            else if(token == "*")
+                res = a * b;
+            else
+            {
+                if(b == 0)
+                    throw DivisionZero();
+                res = a / b;
+            }
+            stack.push(res);
+        }
+        else
+        {
+            throw InvalidToken();
+        }
     }
-    int a = std::atoi(nbr.c_str());
-    if(a >= 10)
-        return false;
-    return true;
+    if(stack.empty())
+        throw EmptyStack();
+    if(stack.size() != 1)
+        throw InvalidToken();
+    return stack.top();
 }
-bool  RPN::is_valide_operator(std::string &oper)
+RPN::RPN(const std::string &str)
 {
-    if(oper.size() > 1)
-        return false;
-    if(oper[0] == '+' || oper[0] == '-' || oper[0] == '*' || oper[0] == '/')
-    {
-        return true;
+    try{
+        
+       
+        std::cout << calcule(str)<<std::endl;
     }
-    return false;
+    catch(std::exception &e)
+    {
+        std::cout << e.what()<< std::endl;
+    }
+}
+RPN::~RPN(){}
+const char* RPN::NotEnoughOperands::what() const throw()
+{
+    return "Error: Not enough operands";
+}
+
+const char* RPN::InvalidToken::what() const throw()
+{
+    return "Error: Invalid RPN expression";
+}
+
+const char* RPN::DivisionZero::what() const throw()
+{
+    return "Error: Division by zero";
+}
+
+const char* RPN::EmptyStack::what() const throw()
+{
+    return "Error: Empty stack";
 }

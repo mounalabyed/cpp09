@@ -1,25 +1,26 @@
-PROG = RPN
+NAME = RPN
 
-CXX = c++
+CXX= c++
 
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 
 
-SRC =   main.cpp RPN.cpp
+SRC = main.cpp    RPN.cpp\
+
+HDR =   RPN.hpp\
 
 OBJ = $(SRC:.cpp=.o)
-  
-NAME = $(PROG)
 
 all : $(NAME)
 
-$(PROG) : $(OBJ)
-	$(CXX) $(CXXFLAGS) $(OBJ) -o $(PROG) 
-	
+$(NAME) : $(OBJ)  $(HDR)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 clean : 
-	rm -rf $(OBJ) 
+	rm -rf $(OBJ)
 
 fclean : clean
-	rm -rf $(PROG)
+	rm -rf $(NAME)
 
 re : fclean all
+
+.SECONDARY: $(OBJ)
