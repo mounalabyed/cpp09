@@ -47,6 +47,11 @@ int main(int argc , char*argv[])
         std::cout << "Error: could not open file."<< std::endl;
         return 1;
     }
+    if (input.peek() == std::ifstream::traits_type::eof())
+    {
+         std::cout << "Error: file empty."<< std::endl;
+        return 1;
+    }
     BitcoinExchange a;
     std::string line ;
     getline(input, line);
