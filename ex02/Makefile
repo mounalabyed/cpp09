@@ -1,25 +1,26 @@
-PROG = PmergeMe
+NAME = PmergeMe
 
-CXX = c++
+CXX= c++
 
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 
 
-SRC =   main.cpp PmergeMe.cpp
+SRC = main.cpp    PmergeMe.cpp\
+
+HDR =   PmergeMe.hpp\
 
 OBJ = $(SRC:.cpp=.o)
-  
-NAME = $(PROG)
 
 all : $(NAME)
 
-$(PROG) : $(OBJ)
-	$(CXX) $(CXXFLAGS) $(OBJ) -o $(PROG) 
-	
+$(NAME) : $(OBJ)  $(HDR)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 clean : 
-	rm -rf $(OBJ) 
+	rm -rf $(OBJ)
 
 fclean : clean
-	rm -rf $(PROG)
+	rm -rf $(NAME)
 
 re : fclean all
+
+.SECONDARY: $(OBJ)

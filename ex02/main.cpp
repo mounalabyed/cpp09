@@ -1,171 +1,79 @@
 #include "PmergeMe.hpp"
-#include <algorithm>
-#include <ctime>
 
-std::vector<int> jacobsthal(int n)
+#include <set>
+#include <climits>
+
+int main(int argc, char** argv) 
 {
-    std::vector<int> vect;
-    int j_0 = 0;
-    int j_1 = 1;
-    int jn_2 = j_0;
-    int jn_1 = j_1;
-    int j =0;
-    // storer les order des indice selon jacohbstal 
-    // ignore 0 pour jacohbstal
-    // if(j_1 <= n -1)
-    //     vect.push_back(1);
-    while(true)
+    if (argc < 2) 
     {
-        j = jn_1 + 2 * jn_2;
-        if(j > n -1)
-            break;
-        vect.push_back(j);
-  jn_2 = jn_1;  // ancienne valeur de jn_1 devient jn_2
-jn_1 = j; ;
+        std::cout << "Error: no input" << std::endl;
+        return 1;
     }
-    // ajouter les indice qui reste en decroissant 
-    for(int i = n-1 ; i >= 0; i--)
+    std::vector<int> vec;
+    std::deque<int> deq;
+
+    for (int i = 1; i < argc; ++i) 
     {
-        bool found = 0;
-        for(size_t j = 0; j < vect.size(); j++)
+        std::string str = argv[i];
+        for (size_t j = 0; j < str.length(); ++j) 
         {
-            if(vect[j] == i)
-            {
-                found = true;
-                break;
-            }
-        }
-        if(!found)
-        {
-           // std::cout << " i = "<< i<< " j "<< j << std::endl;
-            vect.push_back(i);
-        }
-    }
-    //  std::vector<int>::iterator it ;
-    // for(it = vect.begin(); it != vect.end(); it++)
-    // {
-    //     std::cout << " suite = "<< *it << std::endl;
-    // }
-    return vect;
-}
-void insert_ft(std::vector<unsigned int> &vect, unsigned int value)
-{
-    std::vector<unsigned int>::iterator it= vect.begin();
-    while(it != vect.end() && *it < value)
-    {
-        it++;
-    }
-    vect.insert(it, value);
-}
-int main(int argc, char *argv[])
-{
-    if (argc > 2)
-    {
-        clock_t start = clock();
-        PmergeMe a;
-        std::string pair_one;
-        std::string pair_;
-        bool has_orpholan = false;
-        int orpholan;
-        int hold2;
-        int hold1;
-        int i = 1;
-        // 11111111111________________>stor the data in vect<int, int> and stor orpholan if is
-        while (i < argc)
-        {
-            pair_one = argv[i];
-            hold1 = std::atoi(pair_one.c_str());
-            if (!a.is_valide_digit(pair_one))
+            if (!isdigit(str[j])) 
             {
                 std::cout << "Error" << std::endl;
                 return 1;
             }
-            if (i + 1 < argc && argv[i + 1])
-            {
-                pair_ = argv[i + 1];
-                if (!a.is_valide_digit(pair_))
-                {
-                    std::cout << "Error" << std::endl;
-                    return 1;
-                }
-                hold2 = std::atoi(pair_.c_str());
-                a.stor.push_back(std::make_pair(hold1, hold2));
-                i++;
-            }
-            else
-            {
-                pair_one = argv[i];
-                orpholan = std::atoi(pair_one.c_str());
-                has_orpholan = true;
-            }
-            i++;
         }
-
-        std::vector<std::pair<unsigned int, unsigned int> >::iterator it;
-        // if (has_orpholan)
-        // {
-        //     std::cout << " orpholin is : " << orpholan << std::endl;
-        // }
-        // 2222_______________>swap the nmbr if the first is grather
-        for (it = a.stor.begin(); it != a.stor.end(); it++)
+        double num = strtod(str.c_str(),  NULL);
+        if (num < 0 || num > INT_MAX) 
         {
-            if (it->first > it->second)
-            {
-                std::swap(it->first, it->second);
-            }
+            std::cout << "Error" << std::endl;
+            return 1;
         }
-        // 333-________________> extract the seconde elemet metre dans un vect est firt dans un smallest
-
-        for (it = a.stor.begin(); it != a.stor.end(); it++)
+        if (std::find(vec.begin(), vec.end(), num) != vec.end())
         {
-            a.largest.push_back(it->second);
-            a.smallest.push_back(it->first);
+            std::cout << "Error: duplicate detected" << std::endl;
+            return 1;
         }
-        // std::vector<unsigned int>::iterator it2;
-        // for (it2 = a.smallest.begin(); it2 != a.smallest.end(); it2++)
-        // {
-            //     std::cout << " smalstt    = " << *it2 << std::endl;
-            // }
-            // trie largest vect
-            //  std::vector<unsigned int >::iterator it1;
-            if(has_orpholan)
-            a.largest.insert(a.largest.begin(), orpholan);
-            std::sort(a.largest.begin(), a.largest.end());
-            std::vector<int> indice = jacobsthal(a.smallest.size());
-            std::vector<int>::iterator e;
-            for(e = indice.begin(); e !=indice.end() ; e++)
-            {
-                int in = *e;
-                //  std::cout << " value "<< a.smallest[in]<< std::endl;
-                insert_ft(a.largest, a.smallest[in]);
-            }
-            std::vector<unsigned int>::iterator e1 ;
-             std::vector<std::pair<unsigned int, unsigned int> >::iterator it1;
-            std::cout << "Before: " ;
-            for (it1 = a.stor.begin(); it1 != a.stor.end(); it1++)
-            {
-                std::cout << " "<<it1->first<< " " << it1->second;
-            }
-            if(has_orpholan)
-                std::cout << " "<< orpholan<< std::endl;
-            std::cout << "After: ";
-       for(e1 = a.largest.begin(); e1 != a.largest.end(); e1++)
-       {
-        std::cout << *e1 << " "; 
-       }
-       std::cout << "\n";
-        
-
-    clock_t end = clock();    // end time
-
-    double duration_us = double(end - start) / CLOCKS_PER_SEC * 1e6; // microseconds
-
-    std::cout << "Time to process a range of 5 elements with std::sort : "
-              << duration_us << " us" << std::endl;
+        vec.push_back(static_cast<int>(num));
+        deq.push_back(static_cast<int>(num));
     }
 
-    else
-    {
-        std::cout << " invalid argument\n";
-    }
+    std::cout << "vector--> Before: ";
+    for (size_t i = 0; i < vec.size(); ++i)
+        std::cout << vec[i] << " ";
+    std::cout << std::endl;
+
+    std::cout << "deque--> Before: ";
+    for (size_t i = 0; i < deq.size(); ++i)
+        std::cout << deq[i] << " ";
+    std::cout << std::endl;
+
+    PmergeMe sorter;
+    clock_t startVec = clock();
+    sorter.mergeInsertSort(vec);
+    clock_t endVec = clock();
+    double timeVec = static_cast<double>(endVec - startVec) * 1e6 / CLOCKS_PER_SEC;
+
+    clock_t startDeq = clock();
+    sorter.mergeInsertSort(deq);
+    clock_t endDeq = clock();
+    double timeDeq = static_cast<double>(endDeq - startDeq) * 1e6 / CLOCKS_PER_SEC ;
+
+    std::cout << "vector--> After:  ";
+    for (size_t i = 0; i < vec.size(); ++i)
+        std::cout << vec[i] << " ";
+    std::cout << std::endl;
+    std::cout << "deque--> After:  ";
+    for (size_t i = 0; i < deq.size(); ++i)
+        std::cout << deq[i] << " ";
+    std::cout << std::endl;
+
+    std::cout << "Time to process a range of " << vec.size()
+              << " elements with std::vector : " << std::fixed << std::setprecision(5) << timeVec << " us" << std::endl;
+
+    std::cout << "Time to process a range of " << deq.size()
+              << " elements with std::deque  : " << std::fixed << std::setprecision(5) << timeDeq << " us" << std::endl;
+
+    return 0;
 }
