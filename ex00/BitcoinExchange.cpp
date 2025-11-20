@@ -1,6 +1,10 @@
     
 #include"BitcoinExchange.hpp"
 #include <cctype> 
+const char* BitcoinExchange:: Invalidata::what() const throw() 
+{
+    return  "Error : invalid data ";
+}
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
 {
     this->data_ = other.data_;
@@ -100,7 +104,7 @@ float BitcoinExchange::get_date(std::string &date)
     std::map<std::string, float>::iterator it = data_.lower_bound(date);
     if(it == data_.begin() && it->first > date )
     {
-        return 0;
+        throw BitcoinExchange::Invalidata();
     }
     if(it == data_.end() || it->first != date)
         it--;
@@ -120,7 +124,7 @@ void BitcoinExchange::pars_line(std::string &line)
     value_ = trim(value_);
     if(! valid_date(key_))
     {
-        std::cerr << "Error: bad input########## => " << line << std::endl;
+        std::cerr << "Error: bad input => " << line << std::endl;
         return ;
     }
     float value = atof(value_.c_str());
@@ -134,8 +138,15 @@ void BitcoinExchange::pars_line(std::string &line)
         std::cerr << "Error: too large a number." << std::endl;
         return;
     }
-    float rate = get_date(key_);
-    float result = value * rate;
+    try{
 
-    std::cout << key_ << " => " << value << " = " << result << std::endl;
+        float rate = get_date(key_);
+        float result = value * rate;
+    
+        std::cout << key_ << " => " << value << " = " << result << std::endl;
+    }
+    catch(std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
