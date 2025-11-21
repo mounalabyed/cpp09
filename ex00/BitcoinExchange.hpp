@@ -9,19 +9,39 @@
 #include<sstream>
 class  BitcoinExchange{
     private : 
-    std::map<std::string, float>data_;
+    std::map<std::string, double>data_;
 
     public:
     BitcoinExchange();
     BitcoinExchange(const BitcoinExchange &other);
     ~BitcoinExchange();
     BitcoinExchange &operator=(const BitcoinExchange &other);
-   std::string cle(std::string x);
-   float vleur(std::string y);
+   bool is_nmb(std::string &date);
    void pars_line(std::string &ref);
-   bool valid_date(std::string &data);
+   void valid_date(std::string &data);
+   void valid_value(std::string &date);
    float get_date(std::string &ref);
     class Invalidata: public std::exception
+        {
+            public :
+                virtual const char* what() const throw() ;
+        };
+    class Invalidinput: public std::exception
+        {
+            public :
+                virtual const char* what() const throw() ;
+        };
+     class Invalidnegativ: public std::exception
+        {
+            public :
+                virtual const char* what() const throw() ;
+        };
+      class Invalidtolarge: public std::exception
+        {
+            public :
+                virtual const char* what() const throw() ;
+        };
+      class Invalidfile: public std::exception
         {
             public :
                 virtual const char* what() const throw() ;

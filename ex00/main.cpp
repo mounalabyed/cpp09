@@ -52,14 +52,21 @@ int main(int argc , char*argv[])
          std::cout << "Error: file empty."<< std::endl;
         return 1;
     }
-    BitcoinExchange a;
-    std::string line ;
-    getline(input, line);
-    while(getline(input, line))
+    try{
+
+        BitcoinExchange a;
+        std::string line ;
+        getline(input, line);
+        while(getline(input, line))
+        {
+            if (line.empty())
+                continue;
+            a.pars_line(line);
+        }
+    }
+    catch(std::exception &e)
     {
-        if (line.empty())
-            continue;
-        a.pars_line(line);
+        std::cout << e.what()<< std::endl;
     }
   
 
