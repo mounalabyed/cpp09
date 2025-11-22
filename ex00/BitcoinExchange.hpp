@@ -24,27 +24,27 @@ class  BitcoinExchange{
     class Invalidata: public std::exception
         {
             public :
-                virtual const char* what() const throw() ;
+                 const char* what() const throw() ;
         };
     class Invalidinput: public std::exception
         {
             public :
-                virtual const char* what() const throw() ;
+               const char* what() const throw() ;
         };
      class Invalidnegativ: public std::exception
         {
             public :
-                virtual const char* what() const throw() ;
+                 const char* what() const throw() ;
         };
       class Invalidtolarge: public std::exception
         {
             public :
-                virtual const char* what() const throw() ;
+                 const char* what() const throw() ;
         };
       class Invalidfile: public std::exception
         {
             public :
-                virtual const char* what() const throw() ;
+               const char* what() const throw() ;
         };
 };
 std::string trim(const std::string& str);

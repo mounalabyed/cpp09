@@ -8,7 +8,6 @@ int RPN::calcule(const std::string &str)
     {
         if(token.size() == 1 && std::isdigit(token[0]))
             stack.push(token[0] - '0');
-       
         else if (token == "+" || token == "-" || token == "*" || token == "/")
         {
             if(stack.size() < 2)
@@ -48,8 +47,6 @@ int RPN::calcule(const std::string &str)
 RPN::RPN(const std::string &str)
 {
     try{
-        
-       
         std::cout << calcule(str)<<std::endl;
     }
     catch(std::exception &e)
